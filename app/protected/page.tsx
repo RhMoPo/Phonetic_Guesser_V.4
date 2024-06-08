@@ -1,9 +1,14 @@
-import DeployButton from "@/components/DeployButton";
-import AuthButton from "@/components/AuthButton";
+
+import AuthButton from "@/components/buttons/AuthButton";
 import { createClient } from "@/utils/supabase/server";
-import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
-import Header from "@/components/Header";
 import { redirect } from "next/navigation";
+import Header from "@/components/layout-components/header";
+import BackButton from "@/components/buttons/BackButton";
+import { IoLogoGameControllerB } from "react-icons/io";
+import { FaHeart, FaQuestion } from "react-icons/fa";
+import { MdLeaderboard } from "react-icons/md";
+import Link from "next/link";
+
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -18,44 +23,72 @@ export default async function ProtectedPage() {
     return redirect("/login");
   }
 
+    const menuList = [
+      {
+        name: "Free Play",
+        icon: <IoLogoGameControllerB className="inline-block mr-4 h-10 w-10" />,
+        href: "protected/freeplay",
+        aria: "Link to discover page",
+      },
+      {
+        name: "Levels",
+        icon: <FaHeart className="inline-block mr-4 h-10 w-10" />,
+        href: "/protected/Levels",
+        aria: "Link to liked tracks",
+      },
+      {
+        name: "Leaderboard",
+        icon: <MdLeaderboard className="inline-block mr-4 h-10 w-10" />,
+        href: "/protected/Leaderboard",
+        aria: "Link to upload music",
+      },
+      {
+        name: "How to Play",
+        icon: <FaQuestion className="inline-block mr-4 h-10 w-10" />,
+        href: "/protected/HTP",
+        aria: "Link to leaderboard page",
+      }
+    ]
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
+    <>
+      <div className="flex items-center mx-auto mt-24"></div>
+      <nav>
+        <ul className="flex flex-col gap-10 lg:flex-row justify-center">
+          {menuList.map((item, index) => (
+            <li key={item.name}>
+              <Link
+                href={item.href}
+                aria-label={item.aria}
+                className="relative"
+              >
+                <span className="absolute top-0 left-0 mt-2 ml-2 h-full w-full rounded bg-black"></span>
+                <span
+                  className={`relative inline-block h-full w-full rounded-lg border-4 border-black bg-white px-6 py-3 text-xl font-bold text-black transition duration-100 hover:bg-mint hover:text-gray-900 z-60`}
+                >
+                  {item.icon} {item.name}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <AuthButton />
+    </>
+  );
+};
+
+
+
+
+
+{/* <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <div className="w-full">
-        <div className="py-6 font-bold bg-purple-950 text-center">
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-            <DeployButton />
             <AuthButton />
           </div>
         </nav>
-      </div>
-
-      <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
         <Header />
-        <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          <FetchDataSteps />
-        </main>
       </div>
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{" "}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Supabase
-          </a>
-        </p>
-      </footer>
-    </div>
-  );
-}
-
-
+    </div> */}
